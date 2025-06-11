@@ -2,8 +2,12 @@ import { Linha } from '../models/Linha';
 import * as fs from 'fs';
 import * as path from 'path';
 import { isSet } from 'util/types';
+import { PassageiroRepository } from './PassageiroRepository';
+import { Passageiro } from '../models/Passageiro';
 
 export class LinhaRepository {
+    private passageiros: Passageiro[] = []; 
+    private pr: PassageiroRepository = new PassageiroRepository();
     private linhas: Linha[] = [];
     private linhasFilePath: string = path.resolve(__dirname, '..database/linhas.json');
 
@@ -32,6 +36,12 @@ export class LinhaRepository {
         if (this.getById(numero) == undefined) {
             console.log("Esta linha não existe!")
         } else {
+            this.passageiros = this.pr.getAll();
+            this.passageiros.forEach(p => {
+                if(p.linha.numero == numero){
+                    this.pr.removerPassageiro(p.id);
+                }
+            });
             this.linhas.splice(this.linhas.findIndex(linhas => linhas.numero == numero));
             this.save()
         }
