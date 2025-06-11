@@ -8,8 +8,4 @@ export class Linha{
         this.capacidade = capacidade;
     }
 
-    public adicionarLocais(local: String){
-        this.locais.push(local);
-    }
-
 }

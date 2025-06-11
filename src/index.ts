@@ -8,8 +8,6 @@ let linha: Linha = new Linha(303,30);
 
 let passageiro: Passageiro = new Passageiro(1,"Thiago",linha);
 
-passageiro.mostrarInfo();
-
 let passageiroRepository: PassageiroRepository = new PassageiroRepository();
 
 
