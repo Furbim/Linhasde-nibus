@@ -1,0 +1,11 @@
+[
+    {
+        "id": 1,
+        "nome": "Thiago",
+        "linha":{
+            "numero": 303,
+            "capacidade": 30,
+            "locais": ["Barroca","Santa Helena"]
+        }
+    }
+]
