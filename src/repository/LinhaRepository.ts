@@ -36,6 +36,7 @@ export class LinhaRepository {
         this.linhas = this.getAll();
         if (this.getById(numero) == undefined) {
             console.log("Esta linha não existe!")
+            return false
         } else {
             this.passageiros = this.pr.getAll();
             this.passageiros.forEach(p => {
@@ -52,6 +53,7 @@ export class LinhaRepository {
         this.linhas = this.getAll();
         if (this.getById(linha.numero) != undefined) {
             console.log("Esta linha já existe!")
+            return false
         } else {
             this.linhas.push(linha);
             this.save();
@@ -62,6 +64,7 @@ export class LinhaRepository {
         this.linhas = this.getAll();
         if (this.getById(linha.numero) == undefined) {
             console.log("Esta linha não existe!")
+            return false
         } else {
             this.linhas.splice(this.linhas.findIndex(linhas => linhas.numero == linha.numero), 1, linha);
             this.save();
@@ -78,9 +81,15 @@ export class LinhaRepository {
                     quantidadePassageiros++;
                 }
             });
+
             if(linha.capacidade > quantidadePassageiros){
                 console.log(`A linha ${linha.numero} está atendendo a demanda de ${quantidadePassageiros} passageiros, e tem capacidade para atender mais ${(linha.capacidade-quantidadePassageiros)}.`)
+                return true
+            }else{
+                console.log(`A linha ${linha.numero} está atendendo a capacidade máxima de ${quantidadePassageiros} passageiros.`)
+                return false
             }
         }
     }
+    
 }

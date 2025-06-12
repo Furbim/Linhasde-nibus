@@ -36,6 +36,7 @@ export class PassageiroRepository {
         this.passageiros = this.getAll();
         if (this.getById(id) == undefined) {
             console.log("Este passageiro não exite!")
+            return false
         } else {
             this.passageiros.splice(this.passageiros.findIndex(passageiro => passageiro.id == id), 1);
             this.save()
@@ -48,20 +49,23 @@ export class PassageiroRepository {
             console.log("Este passageiro já exite!")
         } else {
             if(this.lr.getById(passageiro.linha.numero) != undefined){
-                this.passageiros.push(passageiro);
-                this.save()
+                if(this.lr.situaçãoLinha(passageiro.linha.numero)){
+                    this.passageiros.push(passageiro);
+                    this.save()
+                }else{
+                    return false
+                }
             }else{
                 console.log("Esta linha não existe");
             }
-
         }
-
     }
 
     atualizarPassageiro(passageiro: Passageiro) {
         this.passageiros = this.getAll();
         if (this.getById(passageiro.id) == undefined) {
             console.log("Este passageiro não exite!")
+            return false
         } else {
             this.passageiros.splice(this.passageiros.findIndex(passageiro => passageiro.id == passageiro.id), 1, passageiro);
             this.save()
