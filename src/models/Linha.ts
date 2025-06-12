@@ -17,3 +17,6 @@ export enum Tipo{
     Publico,
     Executivo
 }
+
+//Trjeto precisa de pontos
+//Criação 
