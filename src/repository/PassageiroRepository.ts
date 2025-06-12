@@ -4,8 +4,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { isSet } from 'util/types';
 import { Linha } from '../models/Linha';
+import { LinhaRepository } from './LinhaRepository';
 
 export class PassageiroRepository {
+    private linhas: Linha[] = [];
+    private lr: LinhaRepository = new LinhaRepository();
     private passageiros: Passageiro[] = [];
     private passageirosFilePath: string = path.resolve(__dirname, '../database/passageiros.json');
 
@@ -44,8 +47,13 @@ export class PassageiroRepository {
         if (this.getById(passageiro.id) != undefined) {
             console.log("Este passageiro já exite!")
         } else {
-            this.passageiros.push(passageiro);
-            this.save()
+            if(this.lr.getById(passageiro.linha.numero) != undefined){
+                this.passageiros.push(passageiro);
+                this.save()
+            }else{
+                console.log("Esta linha não existe");
+            }
+
         }
 
     }

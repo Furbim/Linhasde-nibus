@@ -4,6 +4,7 @@ import * as path from 'path';
 import { isSet } from 'util/types';
 import { PassageiroRepository } from './PassageiroRepository';
 import { Passageiro } from '../models/Passageiro';
+import { get } from 'http';
 
 export class LinhaRepository {
     private passageiros: Passageiro[] = []; 
@@ -64,6 +65,22 @@ export class LinhaRepository {
         } else {
             this.linhas.splice(this.linhas.findIndex(linhas => linhas.numero == linha.numero), 1, linha);
             this.save();
+        }
+    }
+
+    situaçãoLinha(numero: number){
+        let linha: Linha | undefined = this.getById(numero);
+        if(linha != undefined){
+            let quantidadePassageiros = 0;
+            this.passageiros = this.pr.getAll();
+            this.passageiros.forEach(p => {
+                if(p.linha.numero == numero){
+                    quantidadePassageiros++;
+                }
+            });
+            if(linha.capacidade > quantidadePassageiros){
+                console.log(`A linha ${linha.numero} está atendendo a demanda de ${quantidadePassageiros} passageiros, e tem capacidade para atender mais ${(linha.capacidade-quantidadePassageiros)}.`)
+            }
         }
     }
 }
