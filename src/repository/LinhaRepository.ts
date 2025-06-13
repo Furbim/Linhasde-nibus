@@ -100,18 +100,18 @@ export class LinhaRepository {
         }
     }
 
-    addPonto(numero: number, id: number, rua: string, bairro: string, cidade: string): boolean {
+    addPonto(numero: number, numeroLocal: number, rua: string, bairro: string, cidade: string): boolean {
         this.linhas = this.getAll();        
         const linha = this.linhas.find(l => l.getNumero() === numero);
         if (!linha) {
             console.log('Esta linha não existe!');
             return false;
         }
-        if (linha.getLocais().some(p => p.getId() === id)) {
+        if (linha.getLocais().some(p => p.getNumero() === numero) && linha.getLocais().some(p => p.getRua() === rua)) {
             console.log('Este ponto já está cadastrado!');
             return false;
         }
-        linha.adicionarPonto(id, rua, bairro, cidade);   
+        linha.adicionarPonto(numeroLocal, rua, bairro, cidade); 
         this.save();
         return true;
     }

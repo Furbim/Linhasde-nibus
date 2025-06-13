@@ -25,8 +25,9 @@ export class Linha{
     getTipo(){
         return this.tipo;
     }
-    adicionarPonto(id: number, rua: string, bairro: string, cidade: string){
-        let ponto: Pontos = new Pontos(id,rua,bairro,cidade);
+    adicionarPonto(numero: number, rua: string, bairro: string, cidade: string){
+        let id: number = this.locais.length;
+        let ponto: Pontos = new Pontos( id, numero, rua, bairro, cidade);
         this.locais.push(ponto);
     }
 
