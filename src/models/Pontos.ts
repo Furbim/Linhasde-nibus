@@ -1,7 +1,5 @@
 export class Pontos{
     private id: number;
-    private latitude: number;
-    private longitude: number;
     private rua: string;
     private bairro: string;
     private cidade: string;
@@ -9,14 +7,6 @@ export class Pontos{
     getId(): number{
         return this.id;
     }
-
-    getLatitude(): number{
-        return this.latitude;
-    }
-
-    getLongitude(): number{
-        return this.longitude;
-    }   
 
     getRua(): string{
         return this.rua;
@@ -31,10 +21,8 @@ export class Pontos{
     }
 
 
-    constructor(id: number, latitude: number, longitude: number, rua: string, bairro: string, cidade: string){
+    constructor(id: number, rua: string, bairro: string, cidade: string){
         this.id = id;
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.rua = rua;
         this.bairro = bairro;
         this.cidade = cidade;

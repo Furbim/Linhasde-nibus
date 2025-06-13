@@ -1,7 +1,9 @@
+import { Pontos } from "./Pontos";
+
 export class Linha{
     private numero: number;
     private capacidade: number;
-    private locais: String[] = [];
+    private locais: Pontos[] = [];
     tipo: Tipo;
     
 
@@ -22,6 +24,10 @@ export class Linha{
     }
     getTipo(){
         return this.tipo;
+    }
+    adicionarPonto(id: number, rua: string, bairro: string, cidade: string){
+        let ponto: Pontos = new Pontos(id,rua,bairro,cidade);
+        this.locais.push(ponto);
     }
 
 }

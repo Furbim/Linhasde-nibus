@@ -5,6 +5,7 @@ import { isSet } from 'util/types';
 import { PassageiroRepository } from './PassageiroRepository';
 import { Passageiro } from '../models/Passageiro';
 import { get } from 'http';
+import { Pontos } from '../models/Pontos';
 
 export class LinhaRepository {
     private linhas: Linha[] = [];
@@ -22,10 +23,10 @@ export class LinhaRepository {
         this.linhas = this.getAll();
         if (this.linhas.length == 0) {
             return undefined;
-        }else if(this.linhas.find(linhas => linhas.getNumero() == numero) == undefined){
+        } else if (this.linhas.find(linhas => linhas.getNumero() == numero) == undefined) {
             return undefined;
-        }else{
-            return this.linhas.find(linhas => linhas.getNumero() == numero); 
+        } else {
+            return this.linhas.find(linhas => linhas.getNumero() == numero);
         }
     }
 
@@ -34,7 +35,7 @@ export class LinhaRepository {
     }
 
     removerLinha(numero: number) {
-        let passageiros: Passageiro[] = []; 
+        let passageiros: Passageiro[] = [];
         let pr: PassageiroRepository = new PassageiroRepository();
         this.linhas = this.getAll();
         if (this.getById(numero) == undefined) {
@@ -43,7 +44,7 @@ export class LinhaRepository {
         } else {
             passageiros = pr.getAll();
             passageiros.forEach(p => {
-                if(p.getLinha().getNumero() == numero){
+                if (p.getLinha().getNumero() == numero) {
                     pr.removerPassageiro(p.getId());
                 }
             });
@@ -52,7 +53,7 @@ export class LinhaRepository {
         }
     }
 
-    addLinha(linha: Linha): boolean{
+    addLinha(linha: Linha): boolean {
         this.linhas = this.getAll();
         if (this.getById(linha.getNumero()) != undefined) {
             console.log("Esta linha já existe!")
@@ -64,38 +65,56 @@ export class LinhaRepository {
         }
     }
 
-    atualizarLinha(linha: Linha){
+    atualizarLinha(linha: Linha) {
         this.linhas = this.getAll();
         if (this.getById(linha.getNumero()) == undefined) {
             console.log("Esta linha não existe!")
             return false
         } else {
-            this.linhas.splice(this.linhas.findIndex(linhas => linhas.getNumero() == linha.getNumero()), 1, linha);
+            this.linhas.splice(this.linhas.findIndex(l => l.getNumero() == linha.getNumero()), 1);
+
             this.save();
         }
     }
 
-    situaçãoLinha(numero: number){
-        let passageiros: Passageiro[] = []; 
+    situaçãoLinha(numero: number) {
+        let passageiros: Passageiro[] = [];
         let pr: PassageiroRepository = new PassageiroRepository();
         let linha: Linha | undefined = this.getById(numero);
-        if(linha != undefined){
+        if (linha != undefined) {
             let quantidadePassageiros = 0;
             passageiros = pr.getAll();
             passageiros.forEach(p => {
-                if(p.getLinha().getNumero() == numero){
+                if (p.getLinha().getNumero() == numero) {
                     quantidadePassageiros++;
                 }
             });
 
-            if(linha.getCapacidade() > quantidadePassageiros){
-                console.log(`A linha ${linha.getNumero()} está atendendo a demanda de ${quantidadePassageiros} passageiros, e tem capacidade para atender mais ${(linha.getCapacidade()-quantidadePassageiros)}.`)
+            if (linha.getCapacidade() > quantidadePassageiros) {
+                console.log(`A linha ${linha.getNumero()} está atendendo a demanda de ${quantidadePassageiros} passageiros, e tem capacidade para atender mais ${(linha.getCapacidade() - quantidadePassageiros)}.`)
                 return true
-            }else{
+            } else {
                 console.log(`A linha ${linha.getNumero()} está atendendo a capacidade máxima de ${quantidadePassageiros} passageiros.`)
                 return false
             }
         }
     }
-    
+
+    addPonto(numero: number, id: number, rua: string, bairro: string, cidade: string): boolean {
+        this.linhas = this.getAll();        
+        const linha = this.linhas.find(l => l.getNumero() === numero);
+        if (!linha) {
+            console.log('Esta linha não existe!');
+            return false;
+        }
+        if (linha.getLocais().some(p => p.getId() === id)) {
+            console.log('Este ponto já está cadastrado!');
+            return false;
+        }
+        linha.adicionarPonto(id, rua, bairro, cidade);   
+        this.save();
+        return true;
+    }
+
+
 }
