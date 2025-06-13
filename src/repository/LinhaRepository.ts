@@ -52,7 +52,7 @@ export class LinhaRepository {
         }
     }
 
-    addLinha(linha: Linha) {
+    addLinha(linha: Linha): boolean{
         this.linhas = this.getAll();
         if (this.getById(linha.getNumero()) != undefined) {
             console.log("Esta linha já existe!")
@@ -60,6 +60,7 @@ export class LinhaRepository {
         } else {
             this.linhas.push(linha);
             this.save();
+            return true;
         }
     }
 
