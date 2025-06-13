@@ -13,12 +13,13 @@ console.log("Iniciando o sistema de transporte público");
 
 let opcao: number = 0;
 
-while (opcao != 5) {
+while (opcao != 6) {
     console.log("1 - Adicionar uma nova linha");
     console.log("2 - Adicionar um novo passageiro");
     console.log("3 - Listar todas as linhas");
     console.log("4 - Listar todos os passageiros");
-    console.log("5 - Sair");
+    console.log("5 - Adicionar Pontos a uma linha");
+    console.log("6 - Sair");
     opcao = parseInt(readlineSync.question("Digite a opção desejada:"));
 
     switch (opcao) {
@@ -111,8 +112,8 @@ while (opcao != 5) {
             locais.forEach(local => {
                 linhaRepository.addPonto(numero, local.getNumero(), local.getRua(), local.getBairro(), local.getCidade());
             });
-
-
+            console.log("Linha cadastrada com sucesso!");
+            
             break;
         case 2:
             console.log("Adicionar um novo passageiro");
