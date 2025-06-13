@@ -7,8 +7,6 @@ import { Linha } from '../models/Linha';
 import { LinhaRepository } from './LinhaRepository';
 
 export class PassageiroRepository {
-    private linhas: Linha[] = [];
-    private lr: LinhaRepository = new LinhaRepository();
     private passageiros: Passageiro[] = [];
     private passageirosFilePath: string = path.resolve(__dirname, '../database/passageiros.json');
 
@@ -22,10 +20,14 @@ export class PassageiroRepository {
 
     getById(id: number): Passageiro | undefined {
         this.passageiros = this.getAll();
-        if (!isSet(this.passageiros)) {
+        if (this.passageiros.length == 0) {
             return undefined;
+        }else if(this.passageiros.find(passageiro => passageiro.getId() == id) == undefined){
+            return undefined;
+        }else{
+            return this.passageiros.find(passageiro => passageiro.getId() == id)
         }
-        return this.passageiros.find(passageiro => passageiro.id == id)
+        
     }
 
     save() {
@@ -38,18 +40,20 @@ export class PassageiroRepository {
             console.log("Este passageiro não exite!")
             return false
         } else {
-            this.passageiros.splice(this.passageiros.findIndex(passageiro => passageiro.id == id), 1);
+            this.passageiros.splice(this.passageiros.findIndex(passageiro => passageiro.getId() == id), 1);
             this.save()
         }
     }
 
     addPassageiro(passageiro: Passageiro) {
+        let linhas: Linha[] = [];
+        let lr: LinhaRepository = new LinhaRepository();
         this.passageiros = this.getAll();
-        if (this.getById(passageiro.id) != undefined) {
+        if (this.getById(passageiro.getId()) != undefined) {
             console.log("Este passageiro já exite!")
         } else {
-            if(this.lr.getById(passageiro.linha.numero) != undefined){
-                if(this.lr.situaçãoLinha(passageiro.linha.numero)){
+            if(lr.getById(passageiro.getLinha().getNumero()) != undefined){
+                if(lr.situaçãoLinha(passageiro.getLinha().getNumero())){
                     this.passageiros.push(passageiro);
                     this.save()
                 }else{
@@ -63,11 +67,11 @@ export class PassageiroRepository {
 
     atualizarPassageiro(passageiro: Passageiro) {
         this.passageiros = this.getAll();
-        if (this.getById(passageiro.id) == undefined) {
+        if (this.getById(passageiro.getId()) == undefined) {
             console.log("Este passageiro não exite!")
             return false
         } else {
-            this.passageiros.splice(this.passageiros.findIndex(passageiro => passageiro.id == passageiro.id), 1, passageiro);
+            this.passageiros.splice(this.passageiros.findIndex(passageiro => passageiro.getId() == passageiro.getId()), 1, passageiro);
             this.save()
         }
     }

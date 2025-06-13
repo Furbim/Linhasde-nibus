@@ -1,7 +1,7 @@
 export class Linha{
-    numero: number;
-    capacidade: number;
-    locais: String[] = [];
+    private numero: number;
+    private capacidade: number;
+    private locais: String[] = [];
     tipo: Tipo;
     
 
@@ -9,6 +9,19 @@ export class Linha{
         this.numero = numero;
         this.capacidade = capacidade;
         this.tipo = tipo;
+    }
+
+    getNumero(){
+        return this.numero;
+    }
+    getCapacidade(){
+        return this.capacidade;
+    }
+    getLocais(){
+        return this.locais;
+    }
+    getTipo(){
+        return this.tipo;
     }
 
 }

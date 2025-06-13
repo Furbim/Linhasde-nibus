@@ -7,10 +7,8 @@ import { Passageiro } from '../models/Passageiro';
 import { get } from 'http';
 
 export class LinhaRepository {
-    private passageiros: Passageiro[] = []; 
-    private pr: PassageiroRepository = new PassageiroRepository();
     private linhas: Linha[] = [];
-    private linhasFilePath: string = path.resolve(__dirname, '..database/linhas.json');
+    private linhasFilePath: string = path.resolve(__dirname, '../database/linhas.json');
 
     getAll(): Linha[] {
         if (!fs.existsSync(this.linhasFilePath)) {
@@ -22,10 +20,13 @@ export class LinhaRepository {
 
     getById(numero: number): Linha | undefined {
         this.linhas = this.getAll();
-        if (!isSet(this.linhas)) {
+        if (this.linhas.length == 0) {
             return undefined;
+        }else if(this.linhas.find(linhas => linhas.getNumero() == numero) == undefined){
+            return undefined;
+        }else{
+            return this.linhas.find(linhas => linhas.getNumero() == numero); 
         }
-        return this.linhas.find(linhas => linhas.numero == numero);
     }
 
     save() {
@@ -33,25 +34,27 @@ export class LinhaRepository {
     }
 
     removerLinha(numero: number) {
+        let passageiros: Passageiro[] = []; 
+        let pr: PassageiroRepository = new PassageiroRepository();
         this.linhas = this.getAll();
         if (this.getById(numero) == undefined) {
             console.log("Esta linha não existe!")
             return false
         } else {
-            this.passageiros = this.pr.getAll();
-            this.passageiros.forEach(p => {
-                if(p.linha.numero == numero){
-                    this.pr.removerPassageiro(p.id);
+            passageiros = pr.getAll();
+            passageiros.forEach(p => {
+                if(p.getLinha().getNumero() == numero){
+                    pr.removerPassageiro(p.getId());
                 }
             });
-            this.linhas.splice(this.linhas.findIndex(linhas => linhas.numero == numero));
+            this.linhas.splice(this.linhas.findIndex(linhas => linhas.getNumero() == numero));
             this.save()
         }
     }
 
     addLinha(linha: Linha) {
         this.linhas = this.getAll();
-        if (this.getById(linha.numero) != undefined) {
+        if (this.getById(linha.getNumero()) != undefined) {
             console.log("Esta linha já existe!")
             return false
         } else {
@@ -62,31 +65,33 @@ export class LinhaRepository {
 
     atualizarLinha(linha: Linha){
         this.linhas = this.getAll();
-        if (this.getById(linha.numero) == undefined) {
+        if (this.getById(linha.getNumero()) == undefined) {
             console.log("Esta linha não existe!")
             return false
         } else {
-            this.linhas.splice(this.linhas.findIndex(linhas => linhas.numero == linha.numero), 1, linha);
+            this.linhas.splice(this.linhas.findIndex(linhas => linhas.getNumero() == linha.getNumero()), 1, linha);
             this.save();
         }
     }
 
     situaçãoLinha(numero: number){
+        let passageiros: Passageiro[] = []; 
+        let pr: PassageiroRepository = new PassageiroRepository();
         let linha: Linha | undefined = this.getById(numero);
         if(linha != undefined){
             let quantidadePassageiros = 0;
-            this.passageiros = this.pr.getAll();
-            this.passageiros.forEach(p => {
-                if(p.linha.numero == numero){
+            passageiros = pr.getAll();
+            passageiros.forEach(p => {
+                if(p.getLinha().getNumero() == numero){
                     quantidadePassageiros++;
                 }
             });
 
-            if(linha.capacidade > quantidadePassageiros){
-                console.log(`A linha ${linha.numero} está atendendo a demanda de ${quantidadePassageiros} passageiros, e tem capacidade para atender mais ${(linha.capacidade-quantidadePassageiros)}.`)
+            if(linha.getCapacidade() > quantidadePassageiros){
+                console.log(`A linha ${linha.getNumero()} está atendendo a demanda de ${quantidadePassageiros} passageiros, e tem capacidade para atender mais ${(linha.getCapacidade()-quantidadePassageiros)}.`)
                 return true
             }else{
-                console.log(`A linha ${linha.numero} está atendendo a capacidade máxima de ${quantidadePassageiros} passageiros.`)
+                console.log(`A linha ${linha.getNumero()} está atendendo a capacidade máxima de ${quantidadePassageiros} passageiros.`)
                 return false
             }
         }
