@@ -1,1 +1,47 @@
-[{"locais":[],"numero":303,"capacidade":30,"tipo":1},{"locais":[],"numero":30,"capacidade":30,"tipo":1}]
+[
+    {
+        "locais": [],
+        "numero": 303,
+        "capacidade": 30,
+        "tipo": []
+    },
+    {
+        "locais": [],
+        "numero": 30,
+        "capacidade": 30,
+        "tipo": []
+    },
+    {
+        "locais": [],
+        "numero": 33,
+        "capacidade": 100,
+        "tipo": []
+    },
+    {
+        "locais": [],
+        "numero": 35,
+        "capacidade": 4,
+        "tipo": []
+    },
+    {
+        "locais": [
+            {
+                "id": 0,
+                "numero": 21,
+                "rua": "Rua Francisco Duarte de Mendon�a",
+                "bairro": "Santa Helena",
+                "cidade": "Belo Horizonte"
+            }
+        ],
+        "numero": 32,
+        "capacidade": 4,
+        "tipo": [
+            {
+                "numero": 367,
+                "rua": "Av Gal. David Sarnoff",
+                "bairro": "Industrial",
+                "cidade": "Belo Horizonte"
+            }
+        ]
+    }
+]

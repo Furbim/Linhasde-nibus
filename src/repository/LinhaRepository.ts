@@ -15,9 +15,20 @@ export class LinhaRepository {
         if (!fs.existsSync(this.linhasFilePath)) {
             fs.writeFileSync(this.linhasFilePath, JSON.stringify([]));
         }
-        this.linhas = JSON.parse(fs.readFileSync(this.linhasFilePath).toString());
-        return this.linhas
+
+        const data = JSON.parse(fs.readFileSync(this.linhasFilePath, 'utf-8'));
+
+        this.linhas = data.map((obj: any) => {
+            const locais = obj.locais?.map(
+                
+                (p: any) => new Pontos(p.length,p.numero, p.rua, p.bairro, p.cidade)
+            ) || [];
+            return new Linha(obj.numero, obj.capacidade, locais);
+        });
+
+        return this.linhas;
     }
+
 
     getById(numero: number): Linha | undefined {
         this.linhas = this.getAll();
@@ -101,7 +112,7 @@ export class LinhaRepository {
     }
 
     addPonto(numero: number, numeroLocal: number, rua: string, bairro: string, cidade: string): boolean {
-        this.linhas = this.getAll();        
+        this.linhas = this.getAll();
         const linha = this.linhas.find(l => l.getNumero() === numero);
         if (!linha) {
             console.log('Esta linha não existe!');
@@ -111,7 +122,7 @@ export class LinhaRepository {
             console.log('Este ponto já está cadastrado!');
             return false;
         }
-        linha.adicionarPonto(numeroLocal, rua, bairro, cidade); 
+        linha.adicionarPonto(numeroLocal, rua, bairro, cidade);
         this.save();
         return true;
     }

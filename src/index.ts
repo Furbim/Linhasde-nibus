@@ -69,7 +69,7 @@ while (opcao != 6) {
 
                 linha = new Linha(numero, capacidade, tipo);
 
-            } while (linhaRepository.addLinha(linha));
+            } while (!linhaRepository.addLinha(linha));
 
             console.log("Adicionar os pontos da linha");
             let quantidade: number;
@@ -85,7 +85,7 @@ while (opcao != 6) {
 
             } while (isNaN(quantidade) || quantidade <= 0);
 
-            while(cont <= quantidade){
+            while(cont < quantidade){
             let numeroPonto: number;
             let rua: string;
             let bairro: string;
@@ -106,14 +106,14 @@ while (opcao != 6) {
 
             let ponto: Pontos = new Pontos(quantidade,numeroPonto,rua,bairro,cidade);
             locais.push(ponto);
-                
+            cont++;
             }
 
             locais.forEach(local => {
                 linhaRepository.addPonto(numero, local.getNumero(), local.getRua(), local.getBairro(), local.getCidade());
             });
             console.log("Linha cadastrada com sucesso!");
-            
+
             break;
         case 2:
             console.log("Adicionar um novo passageiro");
